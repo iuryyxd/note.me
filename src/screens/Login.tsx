@@ -2,10 +2,19 @@ import ilustration from '../assets/login_ilustration.svg';
 import logoDark from '../assets/logo_dark.svg';
 import { FaGoogle } from 'react-icons/fa';
 import { FiLogIn } from 'react-icons/fi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Login() {
   const [codename, setCodename] = useState<string | null>(null);
+  const [isCodenameValid, setIsCodenameValid] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (codename === null || codename.trim() === '' || codename.trim().length <= 5) {
+      setIsCodenameValid(false);
+    } else {
+      setIsCodenameValid(true);
+    }
+  }, [codename]);
 
   return (
     <div className='w-full h-screen flex items-center bg-screamWhite'>
@@ -46,9 +55,9 @@ export default function Login() {
             <button
               type='submit'
               className={`w-full h-[50px] rounded-lg bg-semanticGreen flex items-center justify-center gap-[10px] text-white transition-opacity ${
-                !codename ? 'opacity-75 cursor-not-allowed' : 'hover:opacity-90'
+                isCodenameValid ? 'hover:opacity-90' : 'opacity-75 cursor-not-allowed'
               }`}
-              disabled={codename ? false : true}
+              disabled={!isCodenameValid}
             >
               <FiLogIn size={20} /> Entrar anonimamente
             </button>

@@ -3,7 +3,7 @@ import { FiLogOut, FiHome, FiPlus } from 'react-icons/fi';
 
 export default function Sidebar() {
   return (
-    <aside className='w-28 h-screen bg-screamWhite shadow-xl flex flex-col items-center justify-between py-7'>
+    <aside className='w-28 h-screen bg-screamWhite shadow-xl flex flex-col items-center justify-between py-7 fixed'>
       <img src={logoDark} alt='logo' />
       <div className='flex flex-col w-full gap-7 self-start'>
         <button className='bg-none flex items-center'>
@@ -16,7 +16,7 @@ export default function Sidebar() {
         </button>
       </div>
       <button className='bg-none'>
-        <FiLogOut size={32} className='opacity-50' />
+        <FiLogOut size={32} className='opacity-50 transition-opacity hover:opacity-100' />
       </button>
     </aside>
   );

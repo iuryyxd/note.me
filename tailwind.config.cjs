@@ -14,7 +14,7 @@ module.exports = {
         opaqueRedOrange: 'rgba(253, 186, 163, 0.4)',
         opaqueLilac: 'rgba(182, 165, 203, 0.4)',
         opaqueGreenCyan: 'rgba(151, 210, 188, 0.6)',
-        opaqueLightCyan: 'rgba(174, 223, 232, 0.6',
+        opaqueLightCyan: 'rgba(174, 223, 232, 0.6)',
         gray: {
           900: '#000000',
           800: '#343539',
