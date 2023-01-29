@@ -4,9 +4,21 @@ import logoLight from '../assets/logo_sidebar_light.svg';
 import { FiLogOut, FiHome, FiPlus } from 'react-icons/fi';
 import ThemeContext from '~/Contexts/ThemeContext';
 import clsx from 'clsx';
+import { auth } from '~/services/firebase';
+import { useNavigate } from 'react-router-dom';
 
 export default function Sidebar() {
   const { theme } = useContext(ThemeContext);
+  const navigate = useNavigate();
+
+  function signOut() {
+    auth
+      .signOut()
+      .then(() => {
+        navigate('/login');
+      })
+      .catch((err) => console.log(err));
+  }
 
   return (
     <aside
@@ -40,7 +52,11 @@ export default function Sidebar() {
         </button>
       </div>
       <button className='bg-none'>
-        <FiLogOut size={32} className='opacity-50 transition-opacity hover:opacity-100' />
+        <FiLogOut
+          size={32}
+          className='opacity-50 transition-opacity hover:opacity-100'
+          onClick={signOut}
+        />
       </button>
     </aside>
   );

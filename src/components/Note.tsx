@@ -1,11 +1,10 @@
 import { useContext } from 'react';
-import dayjs from 'dayjs';
 import ThemeContext from '~/Contexts/ThemeContext';
 import clsx from 'clsx';
 
 interface NoteProps {
   note: string;
-  date: Date;
+  date: string;
   color: string;
 }
 
@@ -33,9 +32,7 @@ export default function Note({ date, note, color }: NoteProps) {
       )}
     >
       <p className='font-medium text-xl'>{note}</p>
-      <small className='font-medium text-sm opacity-80 capitalize'>
-        {dayjs(date).format('MMM, DD YYYY')}
-      </small>
+      <small className='font-medium text-sm opacity-80 capitalize'>{date}</small>
     </div>
   );
 }

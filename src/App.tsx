@@ -13,6 +13,7 @@ export default function App() {
     } else {
       localStorage.setItem('theme', theme);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

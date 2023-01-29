@@ -3,10 +3,20 @@ import logoDark from '../assets/logo_dark.svg';
 import { FaGoogle } from 'react-icons/fa';
 import { FiLogIn } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
+import { signInWithGoogle } from '~/services/firebase';
+import { useNavigate } from 'react-router-dom';
+import { db } from '~/services/firebase';
+import { collection, getDocs, setDoc, doc } from 'firebase/firestore';
+import { defaultNotes } from '~/utils/defaultNotes';
 
 export default function Login() {
   const [codename, setCodename] = useState<string | null>(null);
+  const [disableButton, setDisableButton] = useState<boolean>(false);
   const [isCodenameValid, setIsCodenameValid] = useState<boolean>(false);
+
+  const usersCollectionRef = collection(db, 'users');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (codename === null || codename.trim() === '' || codename.trim().length <= 5) {
@@ -15,6 +25,38 @@ export default function Login() {
       setIsCodenameValid(true);
     }
   }, [codename]);
+
+  async function createUser(user: any) {
+    try {
+      await setDoc(doc(db, 'users', user.uid), {
+        name: user.displayName,
+        notes: defaultNotes,
+      });
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+  }
+
+  function signIn() {
+    setDisableButton(true);
+    signInWithGoogle()
+      .then(async (result) => {
+        const data = await getDocs(usersCollectionRef);
+        const newData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+        const user = newData.filter((doc) => doc.id === result.user.uid);
+        if (user.length === 0) await createUser(result.user);
+
+        navigate('/', {
+          state: {
+            uid: result.user.uid,
+          },
+        });
+      })
+      .catch((error) => {
+        setDisableButton(false);
+        console.log(error);
+      });
+  }
 
   return (
     <div className='w-full h-screen flex items-center bg-screamWhite'>
@@ -34,7 +76,11 @@ export default function Login() {
       <div className='flex flex-col w-1/2 h-full items-center justify-center'>
         <div className='flex flex-col w-[320px]'>
           <img src={logoDark} alt='logo' className='w-[297px] h-[65px] mb-[74px]' />
-          <button className='flex items-center justify-center gap-2 w-full h-[50px] bg-semanticRed text-white rounded-lg font-medium text-base mb-[46px] transition-opacity hover:opacity-90'>
+          <button
+            onClick={signIn}
+            disabled={disableButton}
+            className='flex items-center justify-center gap-2 w-full h-[50px] bg-semanticRed text-white rounded-lg font-medium text-base mb-[46px] transition-opacity hover:opacity-90'
+          >
             <FaGoogle size={24} />
             Entrar com google
           </button>
@@ -57,7 +103,7 @@ export default function Login() {
               className={`w-full h-[50px] rounded-lg bg-semanticGreen flex items-center justify-center gap-[10px] text-white transition-opacity ${
                 isCodenameValid ? 'hover:opacity-90' : 'opacity-75 cursor-not-allowed'
               }`}
-              disabled={!isCodenameValid}
+              disabled={!isCodenameValid || disableButton}
             >
               <FiLogIn size={20} /> Entrar anonimamente
             </button>
