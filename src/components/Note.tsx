@@ -1,4 +1,7 @@
+import { useContext } from 'react';
 import dayjs from 'dayjs';
+import ThemeContext from '~/Contexts/ThemeContext';
+import clsx from 'clsx';
 
 interface NoteProps {
   note: string;
@@ -7,6 +10,8 @@ interface NoteProps {
 }
 
 export default function Note({ date, note, color }: NoteProps) {
+  const { theme } = useContext(ThemeContext);
+
   const colors = {
     opaqueLightYellow: 'bg-opaqueLightYellow',
     opaqueRedOrange: 'bg-opaqueRedOrange',
@@ -17,12 +22,18 @@ export default function Note({ date, note, color }: NoteProps) {
 
   return (
     <div
-      className={`w-[264px] h-[240px] rounded-lg ${
-        colors[color as keyof typeof colors]
-      } flex flex-col justify-between py-6 px-[26px]`}
+      className={clsx(
+        `w-[264px] h-[240px] rounded-lg ${
+          colors[color as keyof typeof colors]
+        } flex flex-col justify-between py-6 px-[26px]`,
+        {
+          ['text-midNight']: theme === 'light' || theme === 'hybrid',
+          ['text-white']: theme === 'dark',
+        },
+      )}
     >
-      <p className='font-medium text-xl text-midNight'>{note}</p>
-      <small className='font-medium text-sm text-midNight opacity-80 capitalize'>
+      <p className='font-medium text-xl'>{note}</p>
+      <small className='font-medium text-sm opacity-80 capitalize'>
         {dayjs(date).format('MMM, DD YYYY')}
       </small>
     </div>

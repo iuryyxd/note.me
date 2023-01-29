@@ -1,33 +1,62 @@
+import { useContext } from 'react';
 import Sidebar from '~/components/Sidebar';
-import { FiMoon, FiSearch } from 'react-icons/fi';
+import { FiMoon, FiSearch, FiSunset, FiSun } from 'react-icons/fi';
 import Note from '~/components/Note';
+import ThemeContext from '~/Contexts/ThemeContext';
+import clsx from 'clsx';
 
 export default function Home() {
+  const { theme, setTheme } = useContext(ThemeContext);
+
+  function handleThemeChange(theme: string) {
+    localStorage.setItem('theme', theme);
+    setTheme(theme);
+  }
+
   return (
     <div className='w-full h-full flex gap-[112px]'>
       <Sidebar />
       <main className='w-full h-full max-w-5xl py-10 ml-[224px]'>
-        <header className='flex items-center justify-between w-full mb-12'>
+        <header
+          className={clsx('flex items-center justify-between w-full mb-12', {
+            ['text-gray-400']: theme === 'light' || theme === 'hybrid',
+            ['text-gray-300']: theme === 'dark',
+          })}
+        >
           <form className='flex items-center gap-3'>
             <button type='submit' className='bg-none'>
-              <FiSearch size={18} className='text-gray-400' />
+              <FiSearch size={18} />
             </button>
             <input
               type='search'
               placeholder='Buscar notas'
-              className='outline-none text-gray-400'
+              className='outline-none bg-transparent'
             />
           </form>
           <button className='bg-none'>
-            <FiMoon size={18} className='text-gray-400' />
+            {theme === 'light' && (
+              <FiSunset size={18} onClick={() => handleThemeChange('hybrid')} />
+            )}
+            {theme === 'hybrid' && <FiMoon size={18} onClick={() => handleThemeChange('dark')} />}
+            {theme === 'dark' && <FiSun size={18} onClick={() => handleThemeChange('light')} />}
           </button>
         </header>
 
         <div className='flex flex-col gap-2'>
-          <h1 className='font-normal text-gray-900 text-3xl'>
+          <h1
+            className={clsx('font-normal text-3xl', {
+              ['text-gray-900']: theme === 'light' || theme === 'hybrid',
+              ['text-white']: theme === 'dark',
+            })}
+          >
             Olá, <span className='font-bold'>Jack! 👋</span>
           </h1>
-          <p className='font-normal text-gray-600 text-xl'>
+          <p
+            className={clsx('font-normaltext-xl', {
+              ['text-gray-600']: theme === 'light' || theme === 'hybrid',
+              ['text-gray-300']: theme === 'dark',
+            })}
+          >
             Todas as suas anotações estão aqui, em um só lugar!
           </p>
         </div>
