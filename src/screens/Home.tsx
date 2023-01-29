@@ -1,17 +1,27 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Sidebar from '~/components/Sidebar';
 import { FiMoon, FiSearch, FiSunset, FiSun } from 'react-icons/fi';
 import Note from '~/components/Note';
 import ThemeContext from '~/Contexts/ThemeContext';
 import clsx from 'clsx';
+import Loading from '~/components/Loading';
 
 export default function Home() {
+  const [loading, setLoading] = useState<boolean>(true);
   const { theme, setTheme } = useContext(ThemeContext);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 900);
+  }, []);
 
   function handleThemeChange(theme: string) {
     localStorage.setItem('theme', theme);
     setTheme(theme);
   }
+
+  if (loading) return <Loading />;
 
   return (
     <div className='w-full h-full flex gap-[112px]'>
