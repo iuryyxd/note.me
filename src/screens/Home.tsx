@@ -8,6 +8,7 @@ import Loading from '~/components/Loading';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { auth, db } from '~/services/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 
 interface UserType {
   name: string;
@@ -29,24 +30,28 @@ export default function Home() {
   const { state } = useLocation();
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 900);
-
-    const user = auth.currentUser;
-    if (!user) navigate('/login');
-
-    const getUsers = async () => {
+    const getUsers = async (uid: string) => {
       const data = await getDocs(usersCollectionRef);
       const newData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       newData.map((doc: any) => {
-        if (doc.id === state.uid) {
+        if (!state && doc.id === uid) {
           setUser(doc);
+          setLoading(false);
+        }
+        if (state && doc.id === state.uid) {
+          setUser(doc);
+          setLoading(false);
         }
       });
     };
 
-    getUsers();
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        getUsers(currentUser.uid);
+      } else {
+        navigate('/login');
+      }
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

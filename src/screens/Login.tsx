@@ -3,7 +3,7 @@ import logoDark from '../assets/logo_dark.svg';
 import { FaGoogle } from 'react-icons/fa';
 import { FiLogIn } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
-import { signInWithGoogle } from '~/services/firebase';
+import { signInAnonymous, signInWithGoogle } from '~/services/firebase';
 import { useNavigate } from 'react-router-dom';
 import { db } from '~/services/firebase';
 import { collection, getDocs, setDoc, doc } from 'firebase/firestore';
@@ -29,12 +29,32 @@ export default function Login() {
   async function createUser(user: any) {
     try {
       await setDoc(doc(db, 'users', user.uid), {
-        name: user.displayName,
+        name: user.displayName ? user.displayName : codename,
         notes: defaultNotes,
       });
     } catch (e) {
       console.error('Error adding document: ', e);
     }
+  }
+
+  function signInWithAnonymous(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    setDisableButton(true);
+    signInAnonymous()
+      .then(async (result) => {
+        await createUser(result.user);
+
+        navigate('/', {
+          state: {
+            uid: result.user.uid,
+          },
+        });
+      })
+      .catch((error) => {
+        setDisableButton(false);
+        console.error(error);
+      });
   }
 
   function signIn() {
@@ -91,7 +111,7 @@ export default function Login() {
             </p>
             <div className='w-28 h-[1px] bg-gray-300' />
           </div>
-          <form className='w-full flex flex-col gap-7'>
+          <form className='w-full flex flex-col gap-7' onSubmit={signInWithAnonymous}>
             <input
               type='text'
               placeholder='Digite seu codinome secreto'

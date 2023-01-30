@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously } from 'firebase/auth';
 import { getFirestore } from '@firebase/firestore';
 
 const firebaseConfig = {
@@ -19,4 +19,8 @@ const provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = () => {
   return signInWithPopup(auth, provider);
+};
+
+export const signInAnonymous = () => {
+  return signInAnonymously(auth);
 };
