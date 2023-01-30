@@ -10,18 +10,18 @@ import { auth, db } from '~/services/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
-interface UserType {
-  name: string;
-  notes: {
-    note: string;
-    created_at: string;
-    color: string;
-  }[];
+interface NotesType {
+  note: string;
+  created_at: string;
+  color: string;
 }
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<string | null>(null);
+  const [notes, setNotes] = useState<NotesType[] | null>(null);
+  const [notesFilter, setNotesFilter] = useState<NotesType[] | null>(null);
+  const [filter, setFilter] = useState<string>('');
   const { theme, setTheme } = useContext(ThemeContext);
 
   const usersCollectionRef = collection(db, 'users');
@@ -35,11 +35,15 @@ export default function Home() {
       const newData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       newData.map((doc: any) => {
         if (!state && doc.id === uid) {
-          setUser(doc);
+          setUser(doc.name);
+          setNotes(doc.notes.reverse());
+          setNotesFilter(doc.notes.reverse());
           setLoading(false);
         }
         if (state && doc.id === state.uid) {
-          setUser(doc);
+          setUser(doc.name);
+          setNotes(doc.notes.reverse());
+          setNotesFilter(doc.notes.reverse());
           setLoading(false);
         }
       });
@@ -56,9 +60,20 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function handleFilter(noteName: string) {
+    setFilter(noteName);
+    if (noteName.trim() === '') setNotesFilter(notes);
+  }
+
   function handleThemeChange(theme: string) {
     localStorage.setItem('theme', theme);
     setTheme(theme);
+  }
+
+  function handleSearchNote(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    setNotesFilter(notes!.filter((note) => note.note.includes(filter.trim())));
   }
 
   if (loading) return <Loading />;
@@ -75,14 +90,22 @@ export default function Home() {
                 ['text-gray-300']: theme === 'dark',
               })}
             >
-              <form className='flex items-center gap-3'>
-                <button type='submit' className='bg-none'>
-                  <FiSearch size={18} />
+              <form className='flex items-center gap-3' onSubmit={handleSearchNote}>
+                <button type='submit' className='bg-transparent'>
+                  <FiSearch
+                    size={18}
+                    className={clsx('transition-all', {
+                      ['hover:text-white']: theme === 'dark',
+                    })}
+                  />
                 </button>
                 <input
                   type='search'
                   placeholder='Buscar notas'
-                  className='outline-none bg-transparent'
+                  className={clsx('outline-none bg-transparent', {
+                    ['text-white']: theme === 'dark',
+                  })}
+                  onChange={(e) => handleFilter(e.target.value)}
                 />
               </form>
               <button className='bg-none'>
@@ -103,7 +126,7 @@ export default function Home() {
                   ['text-white']: theme === 'dark',
                 })}
               >
-                Olá, <span className='font-bold'>{user.name}! 👋</span>
+                Olá, <span className='font-bold'>{user}! 👋</span>
               </h1>
               <p
                 className={clsx('font-normaltext-xl', {
@@ -116,7 +139,7 @@ export default function Home() {
             </div>
 
             <div className='flex gap-9 flex-wrap mt-[63px]'>
-              {user.notes.map((note) => (
+              {notesFilter?.map((note) => (
                 <Note
                   key={crypto.randomUUID()}
                   color={note.color}
