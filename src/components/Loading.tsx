@@ -16,13 +16,13 @@ export default function Loading() {
 
   return (
     <div
-      className={clsx('h-screen w-full flex flex-col items-center justify-center gap-16', {
+      className={clsx('h-screen w-full flex flex-col items-center justify-center gap-16 sm:px-11', {
         ['bg-midNight']: theme === 'dark',
       })}
     >
       {theme === 'dark' ? <img src={logoLight} alt='logo' /> : <img src={logoDark} alt='logo' />}
       <div
-        className={clsx('w-[500px] h-[10px] rounded-2xl', {
+        className={clsx('w-[500px] h-[10px] sm:w-full rounded-2xl', {
           ['bg-opaqueRedOrange']: theme !== 'dark',
           ['bg-gray-800']: theme === 'dark',
         })}
