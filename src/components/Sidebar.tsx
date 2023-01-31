@@ -7,7 +7,11 @@ import clsx from 'clsx';
 import { auth } from '~/services/firebase';
 import { useNavigate } from 'react-router-dom';
 
-export default function Sidebar() {
+interface SidebarProps {
+  createNote: () => void;
+}
+
+export default function Sidebar({ createNote }: SidebarProps) {
   const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
@@ -21,43 +25,54 @@ export default function Sidebar() {
   }
 
   return (
-    <aside
-      className={clsx(
-        'w-28 h-screen  shadow-xl flex flex-col items-center justify-between py-7 fixed',
-        {
-          ['bg-screamWhite']: theme === 'light',
-          ['bg-midNight text-white']: theme === 'dark' || theme === 'hybrid',
-        },
-      )}
-    >
-      {theme === 'light' ? <img src={logoDark} alt='logo' /> : <img src={logoLight} alt='logo' />}
-      <div className='flex flex-col w-full gap-7 self-start'>
-        <button className='bg-none flex items-center'>
-          <div
-            className={clsx('w-1 h-14 rounded-r-[5px]', {
-              ['bg-midNight']: theme === 'light',
-              ['bg-white']: theme === 'dark' || theme === 'hybrid',
-            })}
-          />
-          <FiHome size={32} className='ml-[35px]' />
-        </button>
-        <button className='bg-none flex items-center group'>
-          <div
-            className={clsx('w-1 h-14 group-hover:rounded-r-[5px]', {
-              ['group-hover:bg-midNight']: theme === 'light',
-              ['group-hover:bg-white']: theme === 'dark' || theme === 'hybrid',
-            })}
-          />
-          <FiPlus size={32} className='ml-[35px]' />
-        </button>
-      </div>
-      <button className='bg-none'>
-        <FiLogOut
-          size={32}
-          className='opacity-50 transition-opacity hover:opacity-100'
-          onClick={signOut}
-        />
+    <>
+      <button
+        className={clsx('hidden sm:block fixed bottom-4 right-6 p-5 shadow-lg rounded-full z-50', {
+          ['bg-white text-midNight']: theme === 'light',
+          ['bg-midNight text-white']: theme !== 'light',
+        })}
+        onClick={createNote}
+      >
+        <FiPlus size={32} />
       </button>
-    </aside>
+      <aside
+        className={clsx(
+          'w-28 h-screen shadow-xl flex flex-col items-center justify-between py-7 fixed sm:hidden',
+          {
+            ['bg-screamWhite']: theme === 'light',
+            ['bg-midNight text-white']: theme !== 'light',
+          },
+        )}
+      >
+        {theme === 'light' ? <img src={logoDark} alt='logo' /> : <img src={logoLight} alt='logo' />}
+        <div className='flex flex-col w-full gap-7 self-start'>
+          <button className='bg-none flex items-center'>
+            <div
+              className={clsx('w-1 h-14 rounded-r-[5px]', {
+                ['bg-midNight']: theme === 'light',
+                ['bg-white']: theme === 'dark' || theme === 'hybrid',
+              })}
+            />
+            <FiHome size={32} className='ml-[35px]' />
+          </button>
+          <button className='bg-none flex items-center group' onClick={createNote}>
+            <div
+              className={clsx('w-1 h-14 group-hover:rounded-r-[5px]', {
+                ['group-hover:bg-midNight']: theme === 'light',
+                ['group-hover:bg-white']: theme === 'dark' || theme === 'hybrid',
+              })}
+            />
+            <FiPlus size={32} className='ml-[35px]' />
+          </button>
+        </div>
+        <button className='bg-none'>
+          <FiLogOut
+            size={32}
+            className='opacity-50 transition-opacity hover:opacity-100'
+            onClick={signOut}
+          />
+        </button>
+      </aside>
+    </>
   );
 }

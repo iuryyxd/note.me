@@ -79,8 +79,8 @@ export default function Login() {
   }
 
   return (
-    <div className='w-full h-screen flex items-center bg-screamWhite'>
-      <div className='flex flex-col items-center justify-center w-1/2 h-full bg-white'>
+    <div className='w-full h-screen flex items-center bg-screamWhite lg:justify-center'>
+      <div className='lg:hidden flex flex-col items-center justify-center w-1/2 h-full bg-white'>
         <div className='flex flex-col w-[456px]'>
           <img src={ilustration} alt='man working' className='w-full h-[299px]' />
           <h1 className='font-bold leading-10 text-4xl text-gray-900 mt-[80px]'>
@@ -93,8 +93,8 @@ export default function Login() {
         </div>
       </div>
 
-      <div className='flex flex-col w-1/2 h-full items-center justify-center'>
-        <div className='flex flex-col w-[320px]'>
+      <div className='flex flex-col w-1/2 h-full items-center justify-center sm:w-full'>
+        <div className='flex flex-col w-[320px] sm:w-full sm:px-7 sm:items-center'>
           <img src={logoDark} alt='logo' className='w-[297px] h-[65px] mb-[74px]' />
           <button
             onClick={signIn}
@@ -104,12 +104,12 @@ export default function Login() {
             <FaGoogle size={24} />
             Entrar com google
           </button>
-          <div className='flex items-center gap-6 mb-9'>
-            <div className='w-28 h-[1px] bg-gray-300' />
+          <div className='flex items-center gap-6 sm:gap-0 sm:justify-between mb-9'>
+            <div className='w-28 sm:w-8 h-[1px] bg-gray-300' />
             <p className='w-full text-center text-gray-300 text-sm font-normal'>
               ou entre anonimamente
             </p>
-            <div className='w-28 h-[1px] bg-gray-300' />
+            <div className='w-28 sm:w-8 h-[1px] bg-gray-300' />
           </div>
           <form className='w-full flex flex-col gap-7' onSubmit={signInWithAnonymous}>
             <input
