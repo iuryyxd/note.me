@@ -3,6 +3,22 @@
 module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    screens: {
+      '2xl': { max: '1535px' },
+      // => @media (max-width: 1535px) { ... }
+
+      xl: { max: '1306px' },
+      // => @media (max-width: 1306px) { ... }
+
+      lg: { max: '1023px' },
+      // => @media (max-width: 1023px) { ... }
+
+      md: { max: '767px' },
+      // => @media (max-width: 767px) { ... }
+
+      sm: { max: '639px' },
+      // => @media (max-width: 639px) { ... }
+    },
     extend: {
       colors: {
         rose: '#FDBAA3',
@@ -14,7 +30,7 @@ module.exports = {
         opaqueRedOrange: 'rgba(253, 186, 163, 0.4)',
         opaqueLilac: 'rgba(182, 165, 203, 0.4)',
         opaqueGreenCyan: 'rgba(151, 210, 188, 0.6)',
-        opaqueLightCyan: 'rgba(174, 223, 232, 0.6',
+        opaqueLightCyan: 'rgba(174, 223, 232, 0.6)',
         gray: {
           900: '#000000',
           800: '#343539',
