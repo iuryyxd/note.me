@@ -41,7 +41,7 @@
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=61DAFB
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&logoColor=61DAFB
 [linkedin-url]: https://www.linkedin.com/in/iurysena/
 [Figma]: https://img.shields.io/badge/Figma-20232A?style=for-the-badge&logo=figma&logoColor=61DAFB
 [Figma-url]: https://www.figma.com/file/i5jeqLGWPyCiRVhBLS3UAy/Note.me-(Community)?node-id=157%3A63&t=9uRvqvMX3c2S9bY1-0
