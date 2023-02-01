@@ -19,7 +19,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (codename === null || codename.trim() === '' || codename.trim().length <= 5) {
+    if (codename === null || codename.trim() === '' || codename.trim().length <= 2) {
       setIsCodenameValid(false);
     } else {
       setIsCodenameValid(true);
