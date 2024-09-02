@@ -13,11 +13,6 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## Sobre o projeto
-
-<img src='https://media.discordapp.net/attachments/541938075572371457/1070149603200082011/screencapture-noteme-vercel-app-login-2023-01-31-22_06_32.png?width=948&height=449' />
-<img src='https://media.discordapp.net/attachments/541938075572371457/1070149661819682886/screencapture-noteme-vercel-app-2023-01-31-22_10_54.png?width=948&height=449' />
-
 ## Tecnologias utilizadas
 
 [![React][React.js]][React-url]
